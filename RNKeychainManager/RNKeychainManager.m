@@ -309,7 +309,7 @@ RCT_EXPORT_METHOD(getGenericPasswordForOptions:(NSDictionary *)options resolver:
   }
 
   NSDictionary *query = nil;
-if(![authenticationPrompt isEqual:[NSNull null]){
+  if(![authenticationPrompt isEqual:[NSNull null]]){
     query = @{
     (__bridge NSString *)kSecClass: (__bridge id)(kSecClassGenericPassword),
     (__bridge NSString *)kSecAttrService: service,
