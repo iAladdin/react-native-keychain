@@ -304,18 +304,29 @@ RCT_EXPORT_METHOD(getGenericPasswordForOptions:(NSDictionary *)options resolver:
 {
   NSString *service = serviceValue(options);
   NSString *authenticationPrompt = @"Authenticate to retrieve secret";
-  if (options && options[kAuthenticationPromptMessage]) {
+  if (options) {
     authenticationPrompt = options[kAuthenticationPromptMessage];
   }
 
-  NSDictionary *query = @{
+  NSDictionary *query = nil;
+  if(authenticationPrompt != nil){
+    query = @{
     (__bridge NSString *)kSecClass: (__bridge id)(kSecClassGenericPassword),
     (__bridge NSString *)kSecAttrService: service,
     (__bridge NSString *)kSecReturnAttributes: (__bridge id)kCFBooleanTrue,
     (__bridge NSString *)kSecReturnData: (__bridge id)kCFBooleanTrue,
     (__bridge NSString *)kSecMatchLimit: (__bridge NSString *)kSecMatchLimitOne,
     (__bridge NSString *)kSecUseOperationPrompt: authenticationPrompt
-  };
+   };
+  }else{
+    query = @{
+      (__bridge NSString *)kSecClass: (__bridge id)(kSecClassGenericPassword),
+      (__bridge NSString *)kSecAttrService: service,
+      (__bridge NSString *)kSecReturnAttributes: (__bridge id)kCFBooleanTrue,
+      (__bridge NSString *)kSecReturnData: (__bridge id)kCFBooleanTrue,
+      (__bridge NSString *)kSecMatchLimit: (__bridge NSString *)kSecMatchLimitOne
+    };
+  }
 
   // Look up service in the keychain
   NSDictionary *found = nil;
